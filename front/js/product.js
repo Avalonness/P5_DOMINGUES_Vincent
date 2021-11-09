@@ -68,10 +68,15 @@ Allez au panier (Ok) ou retourner à l'acceuil (Annuler). `)){
         window.location.href = "index.html";
     }
 }
+//Fonction pour ajout dans le lovalStorage:
+const ajoutLocalStorage = () => {
+    produitEnregistreLocal.push(produitOptions);  
+localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal))
+}
+
 //Si déjà produit dans le localStorage
 if(produitEnregistreLocal){
-produitEnregistreLocal.push(produitOptions);  
-localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal))
+    ajoutLocalStorage();
 console.log(produitEnregistreLocal);
 
 fenetreConfirmation();
@@ -79,8 +84,7 @@ fenetreConfirmation();
 //S'il n'y a pas de  produit dans le localStorage
 else{
     produitEnregistreLocal = [];
-    produitEnregistreLocal.push(produitOptions);
-    localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal))
+    ajoutLocalStorage ();
     console.log(produitEnregistreLocal);
 
     fenetreConfirmation();
