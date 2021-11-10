@@ -27,7 +27,7 @@ if (produitEnregistreLocal === null || produitEnregistreLocal == 0 ){
             </div>
             <div class="cart__item__content">
                 <div class="cart__item__content__titlePrice">
-                    <h2>${produitEnregistreLocal[a].nameProduct}</h2>
+                    <h2>${produitEnregistreLocal[a].nameProduct} - ${produitEnregistreLocal[a].colorsProduct}</h2>
                     <p>${produitEnregistreLocal[a].priceProduct} €</p>
                 </div>
                 <div class="cart__item__content__settings">

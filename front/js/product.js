@@ -70,23 +70,28 @@ Allez au panier (Ok) ou retourner à l'acceuil (Annuler). `)){
 }
 //Fonction pour ajout dans le lovalStorage:
 const ajoutLocalStorage = () => {
+    let estDejaPresent = false;
+    console.log(produitEnregistreLocal);
+    produitEnregistreLocal.forEach(function(element){
+        console.log(element.id);
+        if(produitOptions.idProduct == element.idProduct && produitOptions.colorsProduct == element.colorsProduct){
+            element.quantitéProduct = parseInt(element.quantitéProduct) + parseInt(produitOptions.quantitéProduct);
+            estDejaPresent = true;
+            return element;
+        }
+    }) 
+if(!estDejaPresent){
     produitEnregistreLocal.push(produitOptions);  
-localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal));
+}
+    localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal));
 }
 
 //Si déjà produit dans le localStorage
-if(produitEnregistreLocal){
-    ajoutLocalStorage();
-
-fenetreConfirmation();
-}
-//S'il n'y a pas de  produit dans le localStorage
-else{
+if(!produitEnregistreLocal){
     produitEnregistreLocal = [];
-    ajoutLocalStorage ();
-
-    fenetreConfirmation();
 }
+    ajoutLocalStorage ();
+    fenetreConfirmation();
 
 })
 })
