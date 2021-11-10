@@ -1,12 +1,15 @@
 //Récupérer les données du local storage
 let produitEnregistreLocal = JSON.parse(localStorage.getItem("produit"));
 
-/* ---- Injection du Code Dynamique ---- */
+/* ______________________________________
+/!\  Injection du Code Dynamique 
+_________________________________________*/
+
 //Sélection de la classe 
 const panierId = document.getElementById("cart__items");
 
 //Si Panier vide, le notifier.
-if (produitEnregistreLocal === null){
+if (produitEnregistreLocal === null || produitEnregistreLocal == 0 ){
     const panierVide = `<article class="cart__item">
         <div>
             <p>Le panier est vide</p>
@@ -18,7 +21,7 @@ if (produitEnregistreLocal === null){
 
     for(a = 0; a < produitEnregistreLocal.length; a++){
         arrayProduitPanier = arrayProduitPanier + `
-        <article class="cart__item" data-id="${produitEnregistreLocal[a].nameProduct}">
+        <article class="cart__item" data-id="${produitEnregistreLocal[a].idProduct}">
             <div class="cart__item__img">
                 <img src="${produitEnregistreLocal[a].imgProduct}">
             </div>
@@ -45,3 +48,24 @@ if (produitEnregistreLocal === null){
         }
     
 };
+
+
+/* ______________________________________
+/!\  Supprimer un élément du panier 
+_________________________________________*/
+//Localisation du boutton supprimer
+let boutonSupprimerPanier = document.getElementsByClassName(`deleteItem`);
+
+for(let n = 0; n < boutonSupprimerPanier.length; n++){
+    boutonSupprimerPanier[n].addEventListener("click", (event) =>{
+    event.preventDefault();
+
+        //Supprimer l'élément cliqué avec méthode filter
+        let idProductSupprimer = produitEnregistreLocal[n].idProduct;
+        produitEnregistreLocal = produitEnregistreLocal.filter(el => el.idProduct !== idProductSupprimer);
+
+        //Renvoyer l'array dans le localstorage
+        localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal));
+        window.location.href = "cart.html";
+    })
+}

@@ -71,7 +71,7 @@ Allez au panier (Ok) ou retourner à l'acceuil (Annuler). `)){
 //Fonction pour ajout dans le lovalStorage:
 const ajoutLocalStorage = () => {
     produitEnregistreLocal.push(produitOptions);  
-localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal))
+localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal));
 }
 
 //Si déjà produit dans le localStorage
