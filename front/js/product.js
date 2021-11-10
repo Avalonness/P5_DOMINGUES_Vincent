@@ -18,7 +18,7 @@ let i = 0;
 
 //Récupérer l'objet via l'ID
 fetch(`http://localhost:3000/api/products/${id}`).then(function(response){
-response.json().then(function(data){
+response.json().then(function(data){ //Injecter les informations dans le code HTML
 imgProduct.innerHTML = `<img src="${data.imageUrl}" alt="Photographie d'un canapé">`;
 nameProduct.innerHTML = `${data.name}`;
 priceProduct.innerHTML = `${data.price}`;
@@ -30,7 +30,7 @@ for (let i of data.colors) {
 
 /* ----------Panier Utilisateur ---------- */
 //Selection ID formulaire //
-const idOptionsColors= document.querySelector("#colors");
+const idOptionsColors = document.querySelector("#colors");
 const idOptionsQuantity = document.querySelector("#quantity");
 
 //Sélection du bouton ajouter à l'artible//
@@ -50,14 +50,14 @@ let produitOptions = {
     idProduct: data._id,
     colorsProduct: choixOptions,
     priceProduct: data.price,
-    quantitéProduct: choixQuantity
+    quantitéProduct: choixQuantity,
+    imgProduct: data.imageUrl
    
 }
 // ---- Ajout au panier utilisateur ---- //
 //Variable "produitEnregistre"
 
 let produitEnregistreLocal = JSON.parse(localStorage.getItem("produit")); /*JSON.parse pour convertir les données au format JSON en JS*/
-console.log(produitEnregistreLocal);
 
 //Fonction fenetre validation
 const fenetreConfirmation = () => {
@@ -77,7 +77,6 @@ localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal))
 //Si déjà produit dans le localStorage
 if(produitEnregistreLocal){
     ajoutLocalStorage();
-console.log(produitEnregistreLocal);
 
 fenetreConfirmation();
 }
@@ -85,7 +84,6 @@ fenetreConfirmation();
 else{
     produitEnregistreLocal = [];
     ajoutLocalStorage ();
-    console.log(produitEnregistreLocal);
 
     fenetreConfirmation();
 }
