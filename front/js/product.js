@@ -68,12 +68,10 @@ Allez au panier (Ok) ou retourner à l'acceuil (Annuler). `)){
         window.location.href = "index.html";
     }
 }
-//Fonction pour ajout dans le lovalStorage:
+//Fonction pour ajout dans le localStorage:
 const ajoutLocalStorage = () => {
     let estDejaPresent = false;
-    console.log(produitEnregistreLocal);
     produitEnregistreLocal.forEach(function(element){
-        console.log(element.id);
         if(produitOptions.idProduct == element.idProduct && produitOptions.colorsProduct == element.colorsProduct){
             element.quantitéProduct = parseInt(element.quantitéProduct) + parseInt(produitOptions.quantitéProduct);
             estDejaPresent = true;

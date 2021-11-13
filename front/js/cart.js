@@ -73,6 +73,14 @@ for(let n = 0; n < boutonSupprimerPanier.length; n++){
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /!\  Modifier la quantité d'un produit sur le panier
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+//Sélection de l'input pour modifier la quantité du panier
+const selectQuantity = document.querySelectorAll('.itemQuantity');
+
+selectQuantity.forEach(function(valueQuantite){
+    valueQuantite.addEventListener("change", (event) => {
+    console.log(event.target.value);
+});
+});
 
 
 
@@ -98,7 +106,3 @@ produitEnregistreLocal.forEach(function(totalCommandePanier){
 
     articlePrice.innerHTML = `${totalPanier}`;
     articleQuantite.innerHTML = `${totalQuantitePanier}`;
-
-
-
-
