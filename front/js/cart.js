@@ -1,5 +1,6 @@
 //Récupérer les données du local storage
 let produitEnregistreLocal = JSON.parse(localStorage.getItem("produit"));
+console.log(produitEnregistreLocal[0].quantitéProduct);
 
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /!\  Injection du Code Dynamique 
@@ -21,7 +22,7 @@ if (produitEnregistreLocal === null || produitEnregistreLocal == 0 ){
 
     for(a = 0; a < produitEnregistreLocal.length; a++){
         arrayProduitPanier = arrayProduitPanier + `
-        <article class="cart__item" data-id="${produitEnregistreLocal[a].idProduct}">
+        <article class="cart__item" data-id="${produitEnregistreLocal[a].idProduct}" data-color="${produitEnregistreLocal[a].colorsProduct}">
             <div class="cart__item__img">
                 <img src="${produitEnregistreLocal[a].imgProduct}">
             </div>
@@ -62,6 +63,7 @@ for(let n = 0; n < boutonSupprimerPanier.length; n++){
 
         //Supprimer l'élément cliqué avec méthode filter
         let idProductSupprimer = produitEnregistreLocal[n].idProduct;
+        let colorsProductSupprimer = produitEnregistreLocal[n].colorsProduct;
         produitEnregistreLocal = produitEnregistreLocal.filter(el => el.idProduct !== idProductSupprimer);
 
         //Renvoyer l'array dans le localstorage
@@ -78,9 +80,26 @@ const selectQuantity = document.querySelectorAll('.itemQuantity');
 
 selectQuantity.forEach(function(valueQuantite){
     valueQuantite.addEventListener("change", (event) => {
-    console.log(event.target.value);
+        console.log(event.target.value);
+        let newQuantity = event.target.value;
+        let selectItems = event.target.closest(".cart__item").dataset.id;
+        let selectColors = event.target.closest(".cart__item").dataset.color;
+        console.log(selectItems);
+        console.log(selectColors);
+        
+
+       for (i = 0; i < produitEnregistreLocal.length; i++){
+            if(produitEnregistreLocal[i].idProduct == selectItems && produitEnregistreLocal[i].colorsProduct == selectColors){
+            console.log(produitEnregistreLocal[i].idProduct);
+            produitEnregistreLocal[i].quantitéProduct = newQuantity;
+            localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal)); 
+            window.location.href = "cart.html";               
+            }
+        }
+})
 });
-});
+
+
 
 
 

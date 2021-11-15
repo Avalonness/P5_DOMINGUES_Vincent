@@ -14,11 +14,13 @@ const nameProduct = document.getElementById("title");
 const priceProduct = document.getElementById("price");
 const descriptionProduct = document.getElementById("description");
 const colorsProduct = document.getElementById("colors");
+const titleProduct = document.querySelector("title");
 let i = 0;
 
 //Récupérer l'objet via l'ID
 fetch(`http://localhost:3000/api/products/${id}`).then(function(response){
 response.json().then(function(data){ //Injecter les informations dans le code HTML
+titleProduct.innerHTML = `${data.name}`;
 imgProduct.innerHTML = `<img src="${data.imageUrl}" alt="Photographie d'un canapé">`;
 nameProduct.innerHTML = `${data.name}`;
 priceProduct.innerHTML = `${data.price}`;
