@@ -141,21 +141,22 @@ boutonOrderFormulaire.addEventListener("click", (e)=>{
 // Règle pour des noms propres.
 const regExNomPropre = (value) => {
     return /^[A-Za-z]{3,20}$/.test(value);
-}
+};
 
 const regExEmail = (value) => {
     return /^([A-Za-z\d\.-]+)@([a-z\d-]+).([a-z]{2,8})(\.[a-z]{2,8})?$/.test(value);
-}
+};
+
+const regExAdresse = (value) => {
+    return /^[A-Za-z0-9]{5,50}$/.test(value);
+};
 
 const textAlert = (value) => {
     return `${value} : Les caractères spéciaux et chiffres ne sont pas autorisés et doit contenir entre 3 et 20 caractères.`
-}
+};
 
-const textAlertEmail = (value) => {
-    return `${value} : L'adresse email ne saisit ne semble pas valide.`
-}
 
-//Vérification du PRENOM 3 à 20 lettres - Pas de caractère spéciaux
+//Vérification du PRENOM
     function prenomValidation(){
     const prenomValue = formulaireContent.prenom;
     if(regExNomPropre(prenomValue)){
@@ -166,7 +167,7 @@ const textAlertEmail = (value) => {
     }
     };
 
-//Vérification du NOM 3 à 20 lettres - Pas de caractère spéciaux
+//Vérification du NOM
     function nomValidation(){
     const nomValue = formulaireContent.nom;
     if(regExNomPropre(nomValue)){
@@ -177,7 +178,7 @@ const textAlertEmail = (value) => {
     }
     };
 
-//Vérification de la ville 3 à 20 lettres - Pas de caractère spéciaux
+//Vérification de la VILLE 
 function villeValidation(){
     const villeValue = formulaireContent.ville;
     if(regExNomPropre(villeValue)){
@@ -187,21 +188,31 @@ function villeValidation(){
         return false;
     }
     };
-   
+
+//Vérification de l'ADRESSE
+function adresseValidation(){
+    const adresseValue = formulaireContent.adresse;
+    if(regExAdresse(adresseValue)){
+        return true;
+    }else{
+        alert(`L'adresse ne semble pas correcte. Elle ne doit pas contenir de caractère spéciaux et doit comporter entre 5 et 50 caractères.`);
+        return false;
+    }
+    };  
     
-//Vérification du EMAIL 3 à 20 lettres - Pas de caractère spéciaux
+//Vérification du EMAIL 
 function emaillValidation(){
     const emailValue = formulaireContent.email;
     if(regExEmail(emailValue)){
         return true;
     }else{
-        alert(textAlertEmail(`Email`));
+        alert(`L'adresse email ne saisit ne semble pas valide.`);
         return false;
     }
     };  
 
     //Mettre l'objet des valeurs du formulaire dans le localStorage
-    if(prenomValidation() && nomValidation() && villeValidation() && emaillValidation()){
+    if(prenomValidation() && nomValidation() && villeValidation() && emaillValidation() && adresseValidation()){
     localStorage.setItem("formulaireContent", JSON.stringify(formulaireContent));
     } else {
         alert("Le formulaire n'est pas complet ou comporte une erreur.");
