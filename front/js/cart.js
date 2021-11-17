@@ -1,6 +1,5 @@
 //Récupérer les données du local storage
 let produitEnregistreLocal = JSON.parse(localStorage.getItem("produit"));
-console.log(produitEnregistreLocal[0].quantitéProduct);
 
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /!\  Injection du Code Dynamique 
@@ -80,31 +79,22 @@ const selectQuantity = document.querySelectorAll('.itemQuantity');
 
 selectQuantity.forEach(function(valueQuantite){
     valueQuantite.addEventListener("change", (event) => {
-        console.log(event.target.value);
+        //Variable pour sélectionner les articles / quantités
         let newQuantity = event.target.value;
         let selectItems = event.target.closest(".cart__item").dataset.id;
         let selectColors = event.target.closest(".cart__item").dataset.color;
-        console.log(selectItems);
-        console.log(selectColors);
-        
 
+        //Boucle afin de traiter les éléments du localStorage et les comparer aux variables pour modifier le bon élément.
        for (i = 0; i < produitEnregistreLocal.length; i++){
             if(produitEnregistreLocal[i].idProduct == selectItems && produitEnregistreLocal[i].colorsProduct == selectColors){
-            console.log(produitEnregistreLocal[i].idProduct);
             produitEnregistreLocal[i].quantitéProduct = newQuantity;
             localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal)); 
-            window.location.href = "cart.html";               
+            window.location.href = "cart.html";  
+            break;
             }
         }
 })
 });
-
-
-
-
-
-
-
 
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /!\  Calcul du coup total 
@@ -125,3 +115,106 @@ produitEnregistreLocal.forEach(function(totalCommandePanier){
 
     articlePrice.innerHTML = `${totalPanier}`;
     articleQuantite.innerHTML = `${totalQuantitePanier}`;
+
+/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/!\ Formulaire commande 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+//Sélection du formulaire
+const boutonOrderFormulaire = document.querySelector('#order');
+
+//Evenement au click du bouton order
+boutonOrderFormulaire.addEventListener("click", (e)=>{
+    e.preventDefault();
+
+    //Récupérer les valeurs du formulaire : 
+    const formulaireContent = {
+        prenom: document.querySelector("#firstName").value,
+        nom: document.querySelector("#lastName").value,
+        adresse: document.querySelector("#address").value,
+        ville: document.querySelector("#city").value,
+        email: document.querySelector("#email").value
+    }
+
+/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/!\ Validation Formulaire commande 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+// Règle pour des noms propres.
+const regExNomPropre = (value) => {
+    return /^[A-Za-z]{3,20}$/.test(value);
+}
+
+const regExEmail = (value) => {
+    return /^([A-Za-z\d\.-]+)@([a-z\d-]+).([a-z]{2,8})(\.[a-z]{2,8})?$/.test(value);
+}
+
+const textAlert = (value) => {
+    return `${value} : Les caractères spéciaux et chiffres ne sont pas autorisés et doit contenir entre 3 et 20 caractères.`
+}
+
+const textAlertEmail = (value) => {
+    return `${value} : L'adresse email ne saisit ne semble pas valide.`
+}
+
+//Vérification du PRENOM 3 à 20 lettres - Pas de caractère spéciaux
+    function prenomValidation(){
+    const prenomValue = formulaireContent.prenom;
+    if(regExNomPropre(prenomValue)){
+        return true;
+    }else{
+        alert(textAlert(`Prénom`));
+        return false;
+    }
+    };
+
+//Vérification du NOM 3 à 20 lettres - Pas de caractère spéciaux
+    function nomValidation(){
+    const nomValue = formulaireContent.nom;
+    if(regExNomPropre(nomValue)){
+        return true;
+    }else{
+        alert(textAlert(`Nom`));
+        return false;
+    }
+    };
+
+//Vérification de la ville 3 à 20 lettres - Pas de caractère spéciaux
+function villeValidation(){
+    const villeValue = formulaireContent.ville;
+    if(regExNomPropre(villeValue)){
+        return true;
+    }else{
+        alert(textAlert(`Ville`));
+        return false;
+    }
+    };
+   
+    
+//Vérification du EMAIL 3 à 20 lettres - Pas de caractère spéciaux
+function emaillValidation(){
+    const emailValue = formulaireContent.email;
+    if(regExEmail(emailValue)){
+        return true;
+    }else{
+        alert(textAlertEmail(`Email`));
+        return false;
+    }
+    };  
+
+    //Mettre l'objet des valeurs du formulaire dans le localStorage
+    if(prenomValidation() && nomValidation() && villeValidation() && emaillValidation()){
+    localStorage.setItem("formulaireContent", JSON.stringify(formulaireContent));
+    } else {
+        alert("Le formulaire n'est pas complet ou comporte une erreur.");
+    }
+    
+    //Envoyer les informations utilsiateurs ainsi que les produits de la commande
+    const serveurEnvoie = {
+        produitEnregistreLocal,
+        formulaireContent  
+    }
+
+    console.log(serveurEnvoie);
+
+})
+
+
