@@ -140,7 +140,7 @@ boutonOrderFormulaire.addEventListener("click", (e)=>{
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 // Règle pour des noms propres.
 const regExNomPropre = (value) => {
-    return /^[A-Za-z]{3,20}$/.test(value);
+    return /^([A-Za-z]{3,20})?([-]{0,1})?([A-Za-z]{3,20})$/.test(value);
 };
 
 const regExEmail = (value) => {
@@ -148,7 +148,7 @@ const regExEmail = (value) => {
 };
 
 const regExAdresse = (value) => {
-    return /^[A-Za-z0-9]{5,50}$/.test(value);
+    return /^[A-Za-z0-9\s]{5,50}$/.test(value);
 };
 
 const textAlert = (value) => {
@@ -160,8 +160,10 @@ const textAlert = (value) => {
     function prenomValidation(){
     const prenomValue = formulaireContent.prenom;
     if(regExNomPropre(prenomValue)){
+        document.querySelector(`#firstNameErrorMsg`).textContent = ``;
         return true;
     }else{
+        document.querySelector(`#firstNameErrorMsg`).textContent = `Champ obligatoire`;
         alert(textAlert(`Prénom`));
         return false;
     }
@@ -171,20 +173,11 @@ const textAlert = (value) => {
     function nomValidation(){
     const nomValue = formulaireContent.nom;
     if(regExNomPropre(nomValue)){
+        document.querySelector(`#lastNameErrorMsg`).textContent = ``;
         return true;
     }else{
+        document.querySelector(`#lastNameErrorMsg`).textContent = `Champ obligatoire`;
         alert(textAlert(`Nom`));
-        return false;
-    }
-    };
-
-//Vérification de la VILLE 
-function villeValidation(){
-    const villeValue = formulaireContent.ville;
-    if(regExNomPropre(villeValue)){
-        return true;
-    }else{
-        alert(textAlert(`Ville`));
         return false;
     }
     };
@@ -193,26 +186,43 @@ function villeValidation(){
 function adresseValidation(){
     const adresseValue = formulaireContent.adresse;
     if(regExAdresse(adresseValue)){
+        document.querySelector(`#addressErrorMsg`).textContent = ``;
         return true;
     }else{
+        document.querySelector(`#addressErrorMsg`).textContent = `Champ obligatoire`;
         alert(`L'adresse ne semble pas correcte. Elle ne doit pas contenir de caractère spéciaux et doit comporter entre 5 et 50 caractères.`);
         return false;
     }
     };  
+
+//Vérification de la VILLE 
+function villeValidation(){
+    const villeValue = formulaireContent.ville;
+    if(regExNomPropre(villeValue)){
+        document.querySelector(`#cityErrorMsg`).textContent = ``;
+        return true;
+    }else{
+        document.querySelector(`#cityErrorMsg`).textContent = `Champ obligatoire`;
+        alert(textAlert(`Ville`));
+        return false;
+    }
+    };
     
 //Vérification du EMAIL 
 function emaillValidation(){
+    document.querySelector(`#emailErrorMsg`).textContent = ``;
     const emailValue = formulaireContent.email;
     if(regExEmail(emailValue)){
         return true;
     }else{
+        document.querySelector(`#emailErrorMsg`).textContent = `Champ obligatoire`;
         alert(`L'adresse email ne saisit ne semble pas valide.`);
         return false;
     }
     };  
 
     //Mettre l'objet des valeurs du formulaire dans le localStorage
-    if(prenomValidation() && nomValidation() && villeValidation() && emaillValidation() && adresseValidation()){
+    if(prenomValidation() && nomValidation() && adresseValidation() && villeValidation() && emaillValidation()){
     localStorage.setItem("formulaireContent", JSON.stringify(formulaireContent));
     } else {
         alert("Le formulaire n'est pas complet ou comporte une erreur.");
