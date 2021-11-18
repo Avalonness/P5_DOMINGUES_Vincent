@@ -119,8 +119,15 @@ produitEnregistreLocal.forEach(function(totalCommandePanier){
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /!\ Formulaire commande 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+//tableau ID
+let tableauProductId = [];
+for (z = 0; z < produitEnregistreLocal.length; z++){
+tableauProductId.push(produitEnregistreLocal[z].idProduct);
+};
+
 //Sélection du formulaire
 const boutonOrderFormulaire = document.querySelector('#order');
+const validationCommande = document.querySelector('#orderId');
 
 //Evenement au click du bouton order
 boutonOrderFormulaire.addEventListener("click", (e)=>{
@@ -128,10 +135,10 @@ boutonOrderFormulaire.addEventListener("click", (e)=>{
 
     //Récupérer les valeurs du formulaire : 
     const formulaireContent = {
-        prenom: document.querySelector("#firstName").value,
-        nom: document.querySelector("#lastName").value,
-        adresse: document.querySelector("#address").value,
-        ville: document.querySelector("#city").value,
+        firstName: document.querySelector("#firstName").value,
+        lastName: document.querySelector("#lastName").value,
+        address: document.querySelector("#address").value,
+        city: document.querySelector("#city").value,
         email: document.querySelector("#email").value
     }
 
@@ -228,14 +235,47 @@ function emaillValidation(){
         alert("Le formulaire n'est pas complet ou comporte une erreur.");
     }
     
-    //Envoyer les informations utilsiateurs ainsi que les produits de la commande
+    /*//Envoyer les informations utilsiateurs ainsi que les produits de la commande
     const serveurEnvoie = {
         produitEnregistreLocal,
         formulaireContent  
+    }*/
+    
+/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/!\ Requête API POST
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+// Envoyer l'ensemble des informations utilisateurs et produits sur le serveur.
+const requeteServeur = fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        contact: formulaireContent,
+        products: tableauProductId
+    })
+});
+
+//récupérer le résultat dans la console
+requeteServeur.then(async(response)=>{
+    try{
+        const contenu = await response.json();
+        console.log(contenu);
+//Condition si le serveur répond ou non 
+        if(response.ok){
+            idOrderServer = contenu.orderId;
+// renvoie sur la page de validation de commande avec l'id de commande généré par le serveur
+            window.location = `confirmation.html?orderId=${contenu.orderId}`;
+            
+            
+        } else {
+//affiche une erreur avec le serveur s'il ne répond pas
+            alert(`Problème avec le serveur : erreur ${response.status}`)
+        }
+    }catch(e){
+        console.log(e);
     }
-
-    console.log(serveurEnvoie);
-
 })
 
-
+});
