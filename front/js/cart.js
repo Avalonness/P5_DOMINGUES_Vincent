@@ -165,7 +165,7 @@ const textAlert = (value) => {
 
 //Vérification du PRENOM
     function prenomValidation(){
-    const prenomValue = formulaireContent.prenom;
+    const prenomValue = formulaireContent.firstName;
     if(regExNomPropre(prenomValue)){
         document.querySelector(`#firstNameErrorMsg`).textContent = ``;
         return true;
@@ -178,7 +178,7 @@ const textAlert = (value) => {
 
 //Vérification du NOM
     function nomValidation(){
-    const nomValue = formulaireContent.nom;
+    const nomValue = formulaireContent.lastName;
     if(regExNomPropre(nomValue)){
         document.querySelector(`#lastNameErrorMsg`).textContent = ``;
         return true;
@@ -191,7 +191,7 @@ const textAlert = (value) => {
 
 //Vérification de l'ADRESSE
 function adresseValidation(){
-    const adresseValue = formulaireContent.adresse;
+    const adresseValue = formulaireContent.address;
     if(regExAdresse(adresseValue)){
         document.querySelector(`#addressErrorMsg`).textContent = ``;
         return true;
@@ -204,7 +204,7 @@ function adresseValidation(){
 
 //Vérification de la VILLE 
 function villeValidation(){
-    const villeValue = formulaireContent.ville;
+    const villeValue = formulaireContent.city;
     if(regExNomPropre(villeValue)){
         document.querySelector(`#cityErrorMsg`).textContent = ``;
         return true;
@@ -231,17 +231,8 @@ function emaillValidation(){
     //Mettre l'objet des valeurs du formulaire dans le localStorage
     if(prenomValidation() && nomValidation() && adresseValidation() && villeValidation() && emaillValidation()){
     localStorage.setItem("formulaireContent", JSON.stringify(formulaireContent));
-    } else {
-        alert("Le formulaire n'est pas complet ou comporte une erreur.");
-    }
-    
-    /*//Envoyer les informations utilsiateurs ainsi que les produits de la commande
-    const serveurEnvoie = {
-        produitEnregistreLocal,
-        formulaireContent  
-    }*/
-    
-/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /!\ Requête API POST
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
@@ -277,5 +268,16 @@ requeteServeur.then(async(response)=>{
         console.log(e);
     }
 })
+    } else {
+        alert("Le formulaire n'est pas complet ou comporte une erreur.");
+    }
+    
+    /*//Envoyer les informations utilsiateurs ainsi que les produits de la commande
+    const serveurEnvoie = {
+        produitEnregistreLocal,
+        formulaireContent  
+    }*/
+    
+
 
 });
