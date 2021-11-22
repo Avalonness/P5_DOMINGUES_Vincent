@@ -228,15 +228,24 @@ function emaillValidation(){
     }
     };  
 
+    
+let formulaireCheck = false;
+
     //Mettre l'objet des valeurs du formulaire dans le localStorage
     if(prenomValidation() && nomValidation() && adresseValidation() && villeValidation() && emaillValidation()){
     localStorage.setItem("formulaireContent", JSON.stringify(formulaireContent));
+    formulaireCheck = true;
 
-    /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    } else {
+        alert("Le formulaire n'est pas complet ou comporte une erreur.");
+    }
+    
+        /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /!\ Requête API POST
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
 // Envoyer l'ensemble des informations utilisateurs et produits sur le serveur.
+if(formulaireCheck == true){
 const requeteServeur = fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     headers: {
@@ -267,17 +276,6 @@ requeteServeur.then(async(response)=>{
     }catch(e){
         console.log(e);
     }
-})
-    } else {
-        alert("Le formulaire n'est pas complet ou comporte une erreur.");
-    }
-    
-    /*//Envoyer les informations utilsiateurs ainsi que les produits de la commande
-    const serveurEnvoie = {
-        produitEnregistreLocal,
-        formulaireContent  
-    }*/
-    
-
+})};
 
 });
