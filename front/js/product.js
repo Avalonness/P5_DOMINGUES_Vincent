@@ -42,6 +42,11 @@ const btn_ajoutPanier = document.querySelector("#addToCart");
 btn_ajoutPanier.addEventListener("click", (event)=>{
 event.preventDefault();
 
+if (idOptionsQuantity.value == 0){
+    alert("La quantité ne peut pas être égale à 0");
+    return false;
+}else{
+
 //Choix de l'utilisateur//
 const choixOptions = idOptionsColors.value;
 const choixQuantity = idOptionsQuantity.value;
@@ -74,7 +79,7 @@ Allez au panier (Ok) ou retourner à l'acceuil (Annuler). `)){
 const ajoutLocalStorage = () => {
     let estDejaPresent = false;
     produitEnregistreLocal.forEach(function(element){
-        if(produitOptions.idProduct == element.idProduct && produitOptions.colorsProduct == element.colorsProduct){
+        if(produitOptions.idProduct === element.idProduct && produitOptions.colorsProduct === element.colorsProduct){
             element.quantitéProduct = parseInt(element.quantitéProduct) + parseInt(produitOptions.quantitéProduct);
             estDejaPresent = true;
             return element;
@@ -92,9 +97,11 @@ if(!produitEnregistreLocal){
 }
     ajoutLocalStorage ();
     fenetreConfirmation();
-
+}
 })
 })
 });
+
+
 
 

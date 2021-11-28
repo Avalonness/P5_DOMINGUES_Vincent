@@ -14,3 +14,4 @@ const orderId = urlParams.get('orderId')
 const validationCommande = document.querySelector('#orderId');
 // Injection du HTML
 validationCommande.innerHTML = `${orderId}`;
+localStorage.clear();

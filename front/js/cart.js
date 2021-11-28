@@ -9,6 +9,7 @@ let produitEnregistreLocal = JSON.parse(localStorage.getItem("produit"));
 const panierId = document.getElementById("cart__items");
 
 //Si Panier vide, le notifier.
+function injecteHTMLPanier() {
 if (produitEnregistreLocal === null || produitEnregistreLocal == 0 ){
     const panierVide = `<article class="cart__item">
         <div>
@@ -47,7 +48,10 @@ if (produitEnregistreLocal === null || produitEnregistreLocal == 0 ){
             panierId.innerHTML = arrayProduitPanier;
         }
     
-};
+}};
+
+injecteHTMLPanier();
+
 
 
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +71,8 @@ for(let n = 0; n < boutonSupprimerPanier.length; n++){
 
         //Renvoyer l'array dans le localstorage
         localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal));
-        window.location.href = "cart.html";
+        injecteHTMLPanier();
+        calculTotauxPanier();
     })
 }
 
@@ -75,26 +80,32 @@ for(let n = 0; n < boutonSupprimerPanier.length; n++){
 /!\  Modifier la quantité d'un produit sur le panier
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 //Sélection de l'input pour modifier la quantité du panier
-const selectQuantity = document.querySelectorAll('.itemQuantity');
+const totalQuantityModify = document.querySelector('.cart__price');
 
-selectQuantity.forEach(function(valueQuantite){
-    valueQuantite.addEventListener("change", (event) => {
-        //Variable pour sélectionner les articles / quantités
-        let newQuantity = event.target.value;
-        let selectItems = event.target.closest(".cart__item").dataset.id;
-        let selectColors = event.target.closest(".cart__item").dataset.color;
-
-        //Boucle afin de traiter les éléments du localStorage et les comparer aux variables pour modifier le bon élément.
-       for (i = 0; i < produitEnregistreLocal.length; i++){
-            if(produitEnregistreLocal[i].idProduct == selectItems && produitEnregistreLocal[i].colorsProduct == selectColors){
-            produitEnregistreLocal[i].quantitéProduct = newQuantity;
-            localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal)); 
-            window.location.href = "cart.html";  
-            break;
+    const selectQuantity = document.querySelectorAll('.itemQuantity');
+    selectQuantity.forEach(function(valueQuantite){
+        valueQuantite.addEventListener("change", (event) => {
+            console.log("coucou");
+            //Variable pour sélectionner les articles / quantités
+            let newQuantity = event.target.value;
+            let selectItems = event.target.closest(".cart__item").dataset.id;
+            let selectColors = event.target.closest(".cart__item").dataset.color;
+    
+            //Boucle afin de traiter les éléments du localStorage et les comparer aux variables pour modifier le bon élément.
+           for (i = 0; i < produitEnregistreLocal.length; i++){
+                if(produitEnregistreLocal[i].idProduct === selectItems && produitEnregistreLocal[i].colorsProduct === selectColors){
+                produitEnregistreLocal[i].quantitéProduct = newQuantity;
+                localStorage.setItem("produit", JSON.stringify(produitEnregistreLocal));
+                console.log(totalQuantityModify);
+                calculTotauxPanier();             
+                break;
+                }
             }
-        }
-})
-});
+    })
+    });
+
+
+
 
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /!\  Calcul du coup total 
@@ -102,12 +113,14 @@ selectQuantity.forEach(function(valueQuantite){
 
 //Fonction de calcul
 //Variable pour le prix et quantité
+function calculTotauxPanier(){
 let totalPanier = 0;
 let totalQuantitePanier = 0;
 const articlePrice = document.getElementById(`totalPrice`);
 const articleQuantite = document.getElementById('totalQuantity');
 
 //Fonction pour calculer le prix total à partir prix Articles + Quantité Articles du localStorage
+
 produitEnregistreLocal.forEach(function(totalCommandePanier){
     totalQuantitePanier += parseInt(totalCommandePanier.quantitéProduct);;
     totalPanier += totalCommandePanier.priceProduct * parseInt(totalCommandePanier.quantitéProduct);
@@ -115,7 +128,9 @@ produitEnregistreLocal.forEach(function(totalCommandePanier){
 
     articlePrice.innerHTML = `${totalPanier}`;
     articleQuantite.innerHTML = `${totalQuantitePanier}`;
+};
 
+calculTotauxPanier();
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /!\ Formulaire commande 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
@@ -240,7 +255,7 @@ let formulaireCheck = false;
         alert("Le formulaire n'est pas complet ou comporte une erreur.");
     }
     
-        /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /!\ Requête API POST
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
